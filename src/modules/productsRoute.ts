@@ -2,8 +2,8 @@ import { Request, Response, Router } from 'express';
 
 const router = Router();
 
-router.get('/products', (req: Request, res: Response) => {
-  res.json({ message: 'Products fetched successfully!' });
+router.get('/', (req: Request, res: Response) => {
+  res.json({ message: 'Products fetched successfully! using products router' });
 });
 
 export const productsRouter = router;
