@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express, { Request, Response } from 'express';
 import { MAX_JSON_SIZE } from './config/config';
+import { router } from './routes';
 
 export const app = express();
 
@@ -17,3 +18,5 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello world!');
 });
+
+app.use('/api', router)
