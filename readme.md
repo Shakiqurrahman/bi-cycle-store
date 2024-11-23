@@ -39,4 +39,61 @@ Bicycle Store is a modern, robust platform tailored for efficient management of 
 -   PORT
 -   MONGODB_URI
 
+### Getting Started
+
+#### Prerequisites
+
+Ensure you have the following installed:
+
+-   Node.js v20
+-   npm
+
+#### Installation
+
+1. Clone the repository:
+
+```js
+git clone https://github.com/Shakiqurrahman/bi-cycle-store
+cd repository-name
+```
+
+2. Install dependencies:
+
+```js
+npm install
+```
+
+3. Set up environment variables:
+
+```js
+PORT = 5000;
+MONGODB_URI = your_mongodb_uri;
+```
+
+#### Usage
+
+-   Run the development server:
+
+```js
+npm run dev
+```
+
+-   build for production:
+
+```js
+npm run build
+```
+
+-   check the EsLint error:
+
+```js
+npm run lint
+```
+
+-   fix the EsLint error:
+
+```js
+npm run lint:fix
+```
+
 ### Thank You
