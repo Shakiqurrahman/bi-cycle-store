@@ -10,12 +10,12 @@ router.post('/', productController.createABicycle);
 router.get('/', productController.getAllBicycles);
 
 // Get a Specific Bicycle
-router.get('/:productId', productController.getAllBicycles);
+router.get('/:productId', productController.getBicycleById);
 
 // Update a Bicycle
-router.put('/:productId', productController.getAllBicycles);
+router.put('/:productId', productController.updateBicycleById);
 
 // Delete a Bicycle
-router.delete('/:productId', productController.getAllBicycles);
+router.delete('/:productId', productController.deleteBicycleById);
 
 export const productRouter = router;
