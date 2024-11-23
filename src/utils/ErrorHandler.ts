@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 
 type TErrorResponse = {
     message: string;
@@ -7,12 +7,7 @@ type TErrorResponse = {
     stack?: string;
 };
 
-const errorHandler = (
-    error: any,
-    req: Request,
-    res: Response,
-    next: NextFunction,
-) => {
+const errorHandler = (error: any, req: Request, res: Response) => {
     const statusCode = error.status || 500;
     let errorResponse: TErrorResponse;
     if (error.name === 'ZodError') {
