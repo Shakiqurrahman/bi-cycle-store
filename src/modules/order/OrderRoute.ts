@@ -9,4 +9,4 @@ router.post('/', orderControllers.orderABicycle);
 // Calculate Revenue from Orders
 router.get('/revenue', orderControllers.getRevenue);
 
-export const OrderRouter = router;
+export const OrderRoutes = router;

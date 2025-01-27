@@ -18,4 +18,4 @@ router.put('/:productId', productController.updateBicycleById);
 // Delete a Bicycle
 router.delete('/:productId', productController.deleteBicycleById);
 
-export const productRouter = router;
+export const productRoutes = router;
