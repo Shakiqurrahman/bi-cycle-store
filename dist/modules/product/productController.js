@@ -8,80 +8,66 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.productController = void 0;
+const http_status_1 = __importDefault(require("http-status"));
+const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const productService_1 = require("./productService");
 const productValidation_1 = require("./productValidation");
-const createABicycle = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const validatedData = productValidation_1.productValidationSchema.parse(req.body);
-        const newBicycle = yield productService_1.productServices.createBicycleIntoDB(validatedData);
-        res.status(200).json({
-            message: 'Bicycle created successfully',
-            status: true,
-            data: newBicycle,
-        });
-    }
-    catch (error) {
-        next(error);
-    }
-});
-const getAllBicycles = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const bicycles = yield productService_1.productServices.getAllBicyclesFromDB();
-        res.status(200).json({
-            message: 'Bicycles retrieved successfully',
-            status: true,
-            data: bicycles,
-        });
-    }
-    catch (error) {
-        next(error);
-    }
-});
-const getBicycleById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { productId } = req.params;
-        const bicycle = yield productService_1.productServices.getBicycleByIdFromDB(productId);
-        res.status(200).json({
-            message: 'Bicycle retrieved successfully',
-            status: true,
-            data: bicycle,
-        });
-    }
-    catch (error) {
-        next(error);
-    }
-});
-const updateBicycleById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { productId } = req.params;
-        const validatedData = productValidation_1.productUpdateValidationSchema.parse(req.body);
-        const updatedBicycle = yield productService_1.productServices.updateBicycleFromDB(productId, validatedData);
-        res.status(200).json({
-            message: 'Bicycle updated successfully',
-            status: true,
-            data: updatedBicycle,
-        });
-    }
-    catch (error) {
-        next(error);
-    }
-});
-const deleteBicycleById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { productId } = req.params;
-        yield productService_1.productServices.deleteBicycleFromDB(productId);
-        res.status(200).json({
-            message: 'Bicycle deleted successfully',
-            status: true,
-            data: {},
-        });
-    }
-    catch (error) {
-        next(error);
-    }
-});
+const createABicycle = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const validatedData = productValidation_1.productValidationSchema.parse(req.body);
+    const newBicycle = yield productService_1.productServices.createBicycleIntoDB(validatedData);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Bicycle created successfully',
+        data: newBicycle,
+    });
+}));
+const getAllBicycles = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const bicycles = yield productService_1.productServices.getAllBicyclesFromDB();
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Bicycles retrieved successfully',
+        data: bicycles,
+    });
+}));
+const getBicycleById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { productId } = req.params;
+    const bicycle = yield productService_1.productServices.getBicycleByIdFromDB(productId);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Bicycle retrieved successfully',
+        data: bicycle,
+    });
+}));
+const updateBicycleById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { productId } = req.params;
+    const validatedData = productValidation_1.productUpdateValidationSchema.parse(req.body);
+    const updatedBicycle = yield productService_1.productServices.updateBicycleFromDB(productId, validatedData);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Bicycle updated successfully',
+        data: updatedBicycle,
+    });
+}));
+const deleteBicycleById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { productId } = req.params;
+    yield productService_1.productServices.deleteBicycleFromDB(productId);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Bicycle deleted successfully',
+        data: {},
+    });
+}));
 exports.productController = {
     createABicycle,
     getAllBicycles,

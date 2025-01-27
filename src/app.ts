@@ -1,13 +1,13 @@
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
-import { MAX_JSON_SIZE } from './config/config';
-import { router } from './routes';
-import errorHandler from './utils/ErrorHandler';
+import { config } from './config/config';
+import globalErrorHandler from './middlewares/globalErrorHandler';
+import router from './routes/route';
 
 export const app = express();
 
 //middlewares
-app.use(express.json({ limit: MAX_JSON_SIZE }));
+app.use(express.json({ limit: config.MAX_JSON_SIZE }));
 app.use(
     cors({
         origin: '*',
@@ -29,4 +29,4 @@ app.all('*', (req: Request, res: Response, next: NextFunction) => {
 });
 
 // Global Error handler
-app.use(errorHandler);
+app.use(globalErrorHandler);

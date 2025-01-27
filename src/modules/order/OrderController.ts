@@ -1,39 +1,31 @@
-import { NextFunction, Request, Response } from 'express';
+import httpStatus from 'http-status';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
 import { orderServices } from './OrderService';
 import { orderValidationSchema } from './orderValidation';
 
-const orderABicycle = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-) => {
-    try {
-        const validatedData = orderValidationSchema.parse(req.body);
-        const newOrder = await orderServices.placeOrder(validatedData);
+const orderABicycle = catchAsync(async (req, res) => {
+    const validatedData = orderValidationSchema.parse(req.body);
+    const newOrder = await orderServices.placeOrder(validatedData);
 
-        res.status(200).json({
-            message: 'Order created successfully',
-            status: true,
-            data: newOrder,
-        });
-    } catch (error) {
-        next(error);
-    }
-};
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Order created successfully',
+        data: newOrder,
+    });
+});
 
-const getRevenue = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const totalRevenue = await orderServices.calculateRevenue();
+const getRevenue = catchAsync(async (req, res) => {
+    const totalRevenue = await orderServices.calculateRevenue();
 
-        res.status(200).json({
-            message: 'Revenue calculated successfully',
-            status: true,
-            data: { totalRevenue },
-        });
-    } catch (error) {
-        next(error);
-    }
-};
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Revenue calculated successfully',
+        data: { totalRevenue },
+    });
+});
 
 export const orderControllers = {
     orderABicycle,

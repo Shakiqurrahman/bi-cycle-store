@@ -5,8 +5,8 @@ const config_1 = require("./config/config");
 const db_1 = require("./db/db");
 (0, db_1.connectDb)()
     .then(() => {
-    app_1.app.listen(config_1.port, () => {
-        console.log(`☑️ Server is running at port : ${config_1.port}`);
+    app_1.app.listen(config_1.config.PORT, () => {
+        console.log(`☑️ Server is running at port : ${config_1.config.PORT}`);
     });
 })
     .catch((error) => {

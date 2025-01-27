@@ -1,6 +1,14 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-export const port = process.env.PORT || 5000;
-export const MAX_JSON_SIZE = "30mb";
-export const MONGODB_URI = process.env.MONGODB_URI;
+export const config = {
+    NODE_ENV: process.env.NODE_ENV,
+    PORT: process.env.PORT,
+    MAX_JSON_SIZE: '30mb',
+    MONGODB_URI: process.env.MONGODB_URI,
+
+    ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
+    ACCESS_TOKEN_EXPIRY: process.env.ACCESS_TOKEN_EXPIRY,
+    REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
+    REFRESH_TOKEN_EXPIRY: process.env.REFRESH_TOKEN_EXPIRY,
+};
