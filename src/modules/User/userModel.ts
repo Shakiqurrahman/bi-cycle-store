@@ -20,12 +20,15 @@ const userModel = new Schema<IUser>(
         },
         role: {
             type: String,
-            enum: ['admin', 'user'],
-            default: 'user',
+            enum: ['admin', 'customer'],
+            default: 'customer',
         },
         isBlocked: {
             type: Boolean,
             default: false,
+        },
+        profileImage: {
+            type: String,
         },
     },
     {

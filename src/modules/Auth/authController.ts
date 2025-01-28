@@ -42,7 +42,44 @@ const loginUser: RequestHandler = catchAsync(async (req, res) => {
     });
 });
 
+const refreshToken = catchAsync(async (req, res) => {
+    const { refreshToken } = req.cookies;
+    const accessToken = await authServices.generateNewAccessToken(refreshToken);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Access token is retrieved succesfully!',
+        data: accessToken,
+    });
+});
+
+const logoutUser = catchAsync(async (req, res) => {
+    const { refreshToken } = req.cookies;
+    if (!refreshToken) {
+        return sendResponse(res, {
+            statusCode: httpStatus.OK,
+            success: true,
+            message: 'Logged out successfully',
+        });
+    }
+
+    res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+    });
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Logged out successfully',
+    });
+});
+
 export const authControllers = {
     registerUser,
     loginUser,
+    refreshToken,
+    logoutUser,
 };

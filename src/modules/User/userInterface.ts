@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import { Document } from 'mongoose';
 import { USER_ROLE } from './userConstant';
 
@@ -9,6 +7,7 @@ export type TUser = {
     password: string;
     role: string;
     isBlocked: boolean;
+    profileImage: string;
 };
 
 type TUserMethods = {

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import httpStatus from 'http-status';
@@ -7,7 +6,7 @@ import AppError from '../../errors/AppError';
 import { TUser } from '../User/userInterface';
 import { User } from '../User/userModel';
 import { TLoginPayload, TRegisterPayload } from './authInterface';
-import { createToken } from './authUtils';
+import { createToken, verifyToken } from './authUtils';
 
 const registerUserIntoDB = async (
     payload: TRegisterPayload,
@@ -55,7 +54,35 @@ const loginUserFromDB = async (payload: TLoginPayload) => {
     return { accessToken, refreshToken };
 };
 
+const generateNewAccessToken = async (
+    refreshToken: string,
+): Promise<string> => {
+    const decoded = verifyToken(
+        refreshToken,
+        config.REFRESH_TOKEN_SECRET as string,
+    );
+
+    const { userId } = decoded;
+
+    // checking if the user is exist
+    const user = await User.findById(userId);
+
+    if (!user) {
+        throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
+    }
+
+    const isBlocked = user?.isBlocked;
+
+    if (isBlocked) {
+        throw new AppError(httpStatus.NOT_FOUND, 'This user is deleted !');
+    }
+
+    const accessToken = await user.generateAccessToken();
+    return accessToken;
+};
+
 export const authServices = {
     registerUserIntoDB,
     loginUserFromDB,
+    generateNewAccessToken,
 };
