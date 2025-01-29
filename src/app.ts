@@ -20,7 +20,7 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Hello world!');
 });
 
-app.use('/api', router);
+app.use('/api/v1', router);
 
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
     const error = new Error('Resource not found');
