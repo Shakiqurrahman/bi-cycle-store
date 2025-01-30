@@ -36,26 +36,45 @@ const placeOrder = async (orderData: TOrder) => {
 const getAllOrdersFromDB = async (userData: JwtPayload) => {
     // for admin - retrieve all orders
     if (userData.role === USER_ROLE.admin) {
-        const orders = await Order.find();
+        const orders = await Order.find()
+            .populate('user', '_id name email role isBlocked')
+            .populate(
+                'product',
+                '-quantity -price -isFeatured -createdAt -updatedAt -__v',
+            );
         return orders;
     }
 
     // for users - retrieve user's individual orders
     const orders = await Order.find({
-        userId: userData.userId,
-    });
+        user: userData.userId,
+    })
+        .populate('user', '_id name email role isBlocked')
+        .populate(
+            'product',
+            '-quantity -price -isFeatured -createdAt -updatedAt -__v',
+        );
 
     return orders;
 };
 
 const getOrderById = async (orderId: string, userData: JwtPayload) => {
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId)
+        .populate('user', '-createdAt -updatedAt -__v')
+        .populate(
+            'product',
+            '-quantity -price -isFeatured -createdAt -updatedAt -__v',
+        );
     if (!order) {
         throw new AppError(httpStatus.NOT_FOUND, 'Order not found');
     }
 
+    // const user = order.user as { _id: Types.ObjectId };
     const validUser =
-        order.userId === userData.userId || userData.role === USER_ROLE.admin;
+        (order.user && typeof order.user === 'object'
+            ? order.user._id.toString()
+            : order.user.toString()) === userData.userId ||
+        userData.role === USER_ROLE.admin;
 
     if (!validUser) {
         throw new AppError(
@@ -73,7 +92,7 @@ const orderCancel = async (orderId: string, userData: JwtPayload) => {
         throw new AppError(httpStatus.NOT_FOUND, 'Order not found!');
     }
 
-    const validUser = order.userId === userData.userId;
+    const validUser = order.user.toString() === userData.userId;
 
     if (!validUser) {
         throw new AppError(

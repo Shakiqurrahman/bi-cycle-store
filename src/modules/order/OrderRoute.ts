@@ -19,19 +19,19 @@ router.get(
 );
 
 router.get(
-    '/orderId',
+    '/:orderId',
     auth(USER_ROLE.admin, USER_ROLE.customer),
     orderControllers.getOrderById,
 );
 
 router.patch(
-    '/orderId/cancel',
+    '/:orderId/cancel',
     auth(USER_ROLE.customer),
     orderControllers.orderCancelByUser,
 );
 
 router.patch(
-    '/orderId/status/update',
+    '/:orderId/status',
     auth(USER_ROLE.admin),
     orderControllers.orderUpdateByAdmins,
 );

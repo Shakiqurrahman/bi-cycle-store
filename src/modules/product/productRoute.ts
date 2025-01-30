@@ -12,11 +12,7 @@ router.post('/', auth(USER_ROLE.admin), productController.createABicycle);
 router.get('/', productController.getAllBicycles);
 
 // Get a Specific Bicycle
-router.get(
-    '/:productId',
-    auth(USER_ROLE.admin),
-    productController.getBicycleById,
-);
+router.get('/:productId', productController.getBicycleById);
 
 // Update a Bicycle
 router.put(
