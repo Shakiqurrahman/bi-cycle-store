@@ -43,7 +43,7 @@ const loginUser: RequestHandler = catchAsync(async (req, res) => {
 });
 
 const refreshToken = catchAsync(async (req, res) => {
-    const { refreshToken } = req.cookies;
+    const refreshToken = req.cookies?.refreshToken;
     const accessToken = await authServices.generateNewAccessToken(refreshToken);
 
     sendResponse(res, {

@@ -57,6 +57,9 @@ const loginUserFromDB = async (payload: TLoginPayload) => {
 const generateNewAccessToken = async (
     refreshToken: string,
 ): Promise<string> => {
+    if (!refreshToken) {
+        throw new AppError(httpStatus.NOT_FOUND, 'Refresh token not found !');
+    }
     const decoded = verifyToken(
         refreshToken,
         config.REFRESH_TOKEN_SECRET as string,
