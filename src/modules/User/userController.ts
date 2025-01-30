@@ -43,8 +43,22 @@ const changePassword: RequestHandler = catchAsync(async (req, res) => {
     });
 });
 
+const blockUser = catchAsync(async (req, res) => {
+    const { userId } = req.params;
+
+    await userServices.blockUserFromDB(userId);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'user blocked succesfully!',
+        data: {},
+    });
+});
+
 export const userController = {
     getUserById,
     updateUser,
     changePassword,
+    blockUser,
 };

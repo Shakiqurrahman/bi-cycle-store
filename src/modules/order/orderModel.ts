@@ -1,12 +1,12 @@
 import { model, Schema } from 'mongoose';
+import { OrderStatus } from './OrderConstants';
 import { TOrder } from './orderInterface';
 
 const orderSchema = new Schema<TOrder>(
     {
-        email: {
-            type: String,
-            lowercase: true,
-            required: true,
+        userId: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
         },
         product: {
             type: Schema.Types.ObjectId,
@@ -15,6 +15,11 @@ const orderSchema = new Schema<TOrder>(
         },
         quantity: Number,
         totalPrice: Number,
+        status: {
+            type: String,
+            enum: Object.values(OrderStatus),
+            default: OrderStatus.Pending,
+        },
     },
     {
         timestamps: true,

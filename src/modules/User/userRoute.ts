@@ -20,5 +20,6 @@ router.get(
     auth(USER_ROLE.admin, USER_ROLE.customer),
     userController.changePassword,
 );
+router.get('/:userId/block', auth(USER_ROLE.admin), userController.blockUser);
 
 export const userRoutes = router;

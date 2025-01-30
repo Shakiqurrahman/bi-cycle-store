@@ -21,7 +21,14 @@ const productSchema = new Schema<TBicycle>(
             type: Number,
             default: 0,
         },
-        inStock: Boolean,
+        inStock: {
+            type: Boolean,
+            default: true,
+        },
+        isFeatured: {
+            type: Boolean,
+            default: false,
+        },
     },
     {
         timestamps: true,

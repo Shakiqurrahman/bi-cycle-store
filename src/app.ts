@@ -1,7 +1,8 @@
 import cors from 'cors';
-import express, { NextFunction, Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import { config } from './config/config';
 import globalErrorHandler from './middlewares/globalErrorHandler';
+import notFound from './middlewares/notFound';
 import router from './routes/route';
 
 export const app = express();
@@ -22,11 +23,8 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/api/v1', router);
 
-app.all('*', (req: Request, res: Response, next: NextFunction) => {
-    const error = new Error('Resource not found');
-    error.name = 'Not Found';
-    next(error);
-});
+// Not Found Handler [should be after all routes]
+app.use(notFound);
 
 // Global Error handler
 app.use(globalErrorHandler);

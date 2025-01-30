@@ -55,8 +55,8 @@ const refreshToken = catchAsync(async (req, res) => {
 });
 
 const logoutUser = catchAsync(async (req, res) => {
-    const { refreshToken } = req.cookies;
-    if (!refreshToken) {
+    const refreshToken = req.cookies?.refreshToken;
+    if (!req.cookies || !refreshToken) {
         return sendResponse(res, {
             statusCode: httpStatus.OK,
             success: true,
@@ -67,7 +67,6 @@ const logoutUser = catchAsync(async (req, res) => {
     res.clearCookie('refreshToken', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
     });
 
     sendResponse(res, {

@@ -53,8 +53,22 @@ const changePasswordFromDB = async (
     await user.save();
 };
 
+const blockUserFromDB = async (userId: string) => {
+    const user = await User.findById(userId);
+
+    if (!user) {
+        throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+    }
+
+    user.isBlocked = true;
+    user.save();
+
+    return;
+};
+
 export const userServices = {
     getUserByIdFromDB,
     updateUserFromDB,
     changePasswordFromDB,
+    blockUserFromDB,
 };

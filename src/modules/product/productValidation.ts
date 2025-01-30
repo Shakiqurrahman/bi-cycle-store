@@ -7,7 +7,8 @@ export const productValidationSchema = z.object({
     type: z.enum(['Mountain', 'Road', 'Hybrid', 'BMX', 'Electric']),
     description: z.string(),
     quantity: z.number().min(0, 'Price must be a positive number'),
-    inStock: z.boolean(),
+    inStock: z.boolean().default(true),
+    isFeatured: z.boolean().default(false),
 });
 
 export const productUpdateValidationSchema = productValidationSchema.partial();
