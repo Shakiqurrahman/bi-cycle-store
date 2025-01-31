@@ -11,20 +11,29 @@ const registerUser: RequestHandler = catchAsync(async (req, res) => {
         req.body,
     );
 
-    const newUser = await authServices.registerUserIntoDB(validatedData);
+    const { user, accessToken, refreshToken } =
+        await authServices.registerUserIntoDB(validatedData);
+
+    res.cookie('refreshToken', refreshToken, {
+        secure: config.NODE_ENV === 'production',
+        httpOnly: true,
+    });
 
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
         message: 'User registered successfully',
-        data: newUser,
+        data: {
+            user,
+            accessToken,
+        },
     });
 });
 
 const loginUser: RequestHandler = catchAsync(async (req, res) => {
     const validatedData = authValidation.loginValidationSchema.parse(req.body);
 
-    const { accessToken, refreshToken } =
+    const { user, accessToken, refreshToken } =
         await authServices.loginUserFromDB(validatedData);
 
     res.cookie('refreshToken', refreshToken, {
@@ -38,6 +47,7 @@ const loginUser: RequestHandler = catchAsync(async (req, res) => {
         message: 'Login successful',
         data: {
             accessToken,
+            user,
         },
     });
 });

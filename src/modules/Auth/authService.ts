@@ -3,14 +3,11 @@
 import httpStatus from 'http-status';
 import { config } from '../../config/config';
 import AppError from '../../errors/AppError';
-import { TUser } from '../User/userInterface';
 import { User } from '../User/userModel';
 import { TLoginPayload, TRegisterPayload } from './authInterface';
 import { createToken, verifyToken } from './authUtils';
 
-const registerUserIntoDB = async (
-    payload: TRegisterPayload,
-): Promise<Omit<TUser, 'password'>> => {
+const registerUserIntoDB = async (payload: TRegisterPayload) => {
     const isUserRegistered = await User.findOne({ email: payload.email });
 
     if (isUserRegistered) {
@@ -19,7 +16,27 @@ const registerUserIntoDB = async (
 
     const newUser = await User.create(payload);
     const { password, ...data } = newUser.toObject();
-    return data;
+
+    const jwtPayload = {
+        userId: newUser.id,
+        role: newUser.role,
+    };
+    const accessToken = createToken(
+        jwtPayload,
+        config.ACCESS_TOKEN_SECRET as string,
+        config.ACCESS_TOKEN_EXPIRY as string,
+    );
+
+    const refreshToken = createToken(
+        jwtPayload,
+        config.REFRESH_TOKEN_SECRET as string,
+        config.REFRESH_TOKEN_EXPIRY as string,
+    );
+    return {
+        accessToken,
+        refreshToken,
+        user: data,
+    };
 };
 
 const loginUserFromDB = async (payload: TLoginPayload) => {
@@ -34,6 +51,8 @@ const loginUserFromDB = async (payload: TLoginPayload) => {
     if (user.isBlocked) {
         throw new AppError(httpStatus.UNAUTHORIZED, 'This user is blocked');
     }
+
+    const { password, ...restUser } = user.toObject();
 
     const jwtPayload = {
         userId: user.id,
@@ -51,7 +70,7 @@ const loginUserFromDB = async (payload: TLoginPayload) => {
         config.REFRESH_TOKEN_EXPIRY as string,
     );
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, user: restUser };
 };
 
 const generateNewAccessToken = async (
