@@ -35,7 +35,7 @@ const changePasswordFromDB = async (
         newPassword: string;
     },
 ) => {
-    const user = await User.findById(userData.userId);
+    const user = await User.findById(userData.userId).select('+password');
 
     if (!user) {
         throw new AppError(httpStatus.NOT_FOUND, 'User not found');
@@ -46,7 +46,7 @@ const changePasswordFromDB = async (
         throw new AppError(httpStatus.UNAUTHORIZED, 'This user is block !');
     }
     if (!(await user.comparePassword(payload.oldPassword))) {
-        throw new AppError(httpStatus.UNAUTHORIZED, 'Incorrect old password');
+        throw new AppError(httpStatus.NOT_ACCEPTABLE, 'Incorrect old password');
     }
 
     user.password = payload.newPassword;

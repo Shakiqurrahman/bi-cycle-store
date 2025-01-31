@@ -22,39 +22,44 @@ const auth = (...requiredRoles: TUserRole[]) => {
                 );
             }
 
-            // checking if the given token is valid
-            const decoded = jwt.verify(
-                token,
-                config.ACCESS_TOKEN_SECRET as string,
-            ) as JwtPayload;
+            try {
+                // checking if the given token is valid
+                const decoded = jwt.verify(
+                    token,
+                    config.ACCESS_TOKEN_SECRET as string,
+                ) as JwtPayload;
 
-            const { role, userId } = decoded;
+                const { role, userId } = decoded;
 
-            const user = await User.findById(userId);
+                const user = await User.findById(userId);
 
-            if (!user) {
-                throw new AppError(
-                    httpStatus.NOT_FOUND,
-                    'This user is not found!',
-                );
+                if (!user) {
+                    throw new AppError(
+                        httpStatus.NOT_FOUND,
+                        'This user is not found!',
+                    );
+                }
+
+                if (user.isBlocked) {
+                    throw new AppError(
+                        httpStatus.UNAUTHORIZED,
+                        'This user is blocked',
+                    );
+                }
+
+                if (requiredRoles && !requiredRoles.includes(role)) {
+                    throw new AppError(
+                        httpStatus.UNAUTHORIZED,
+                        'You are not authorized!',
+                    );
+                }
+
+                req.user = decoded as JwtPayload;
+                next();
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            } catch (error) {
+                throw new AppError(httpStatus.FORBIDDEN, 'Invalid token');
             }
-
-            if (user.isBlocked) {
-                throw new AppError(
-                    httpStatus.UNAUTHORIZED,
-                    'This user is blocked',
-                );
-            }
-
-            if (requiredRoles && !requiredRoles.includes(role)) {
-                throw new AppError(
-                    httpStatus.UNAUTHORIZED,
-                    'You are not authorized!',
-                );
-            }
-
-            req.user = decoded as JwtPayload;
-            next();
         },
     );
 };

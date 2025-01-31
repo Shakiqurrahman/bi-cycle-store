@@ -5,14 +5,13 @@ export type TUser = {
     name: string;
     email: string;
     password: string;
+    avatar: string;
     role: string;
     isBlocked: boolean;
-    profileImage: string;
 };
 
 type TUserMethods = {
     comparePassword(password: string): Promise<boolean>;
-    generateAccessToken(): Promise<string>;
 };
 
 export interface IUser extends TUser, TUserMethods, Document {}

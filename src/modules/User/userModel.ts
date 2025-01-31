@@ -18,6 +18,9 @@ const userModel = new Schema<IUser>(
             required: true,
             select: false,
         },
+        avatar: {
+            type: String,
+        },
         role: {
             type: String,
             enum: ['admin', 'customer'],
@@ -26,9 +29,6 @@ const userModel = new Schema<IUser>(
         isBlocked: {
             type: Boolean,
             default: false,
-        },
-        profileImage: {
-            type: String,
         },
     },
     {

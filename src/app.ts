@@ -4,6 +4,7 @@ import { config } from './config/config';
 import globalErrorHandler from './middlewares/globalErrorHandler';
 import notFound from './middlewares/notFound';
 import router from './routes/route';
+import cookieParser from "cookie-parser"
 
 export const app = express();
 
@@ -11,11 +12,12 @@ export const app = express();
 app.use(express.json({ limit: config.MAX_JSON_SIZE }));
 app.use(
     cors({
-        origin: '*',
+        origin: ['http://localhost:5173'],
         credentials: true,
     }),
 );
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello world!');

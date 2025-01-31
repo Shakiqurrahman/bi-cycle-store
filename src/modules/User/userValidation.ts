@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const updateUser = z.object({
     name: z.string().optional(),
-    profileImage: z.string().optional(),
+    avatar: z.string().optional(),
 });
 
 const changePassword = z.object({

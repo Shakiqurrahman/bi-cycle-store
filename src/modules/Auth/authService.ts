@@ -80,7 +80,15 @@ const generateNewAccessToken = async (
         throw new AppError(httpStatus.NOT_FOUND, 'This user is deleted !');
     }
 
-    const accessToken = await user.generateAccessToken();
+    const jwtPayload = {
+        userId: user.id,
+        role: user.role,
+    };
+    const accessToken = createToken(
+        jwtPayload,
+        config.ACCESS_TOKEN_SECRET as string,
+        config.ACCESS_TOKEN_EXPIRY as string,
+    );
     return accessToken;
 };
 
