@@ -29,7 +29,12 @@ const placeOrder = async (orderData: TOrder) => {
 
     await bicycle.save();
 
-    const order = await Order.create(orderData);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { totalPrice, ...restOfOrderData } = orderData;
+    const order = await Order.create({
+        totalPrice: bicycle.price * orderData.quantity,
+        ...restOfOrderData,
+    });
     return order;
 };
 
