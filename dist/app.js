@@ -15,10 +15,7 @@ exports.app = (0, express_1.default)();
 //middlewares
 exports.app.use(express_1.default.json({ limit: config_1.config.MAX_JSON_SIZE }));
 exports.app.use((0, cors_1.default)({
-    origin: [
-        'http://localhost:5173',
-        'https://bicycle-store-frontend-pi.vercel.app/',
-    ],
+    origin: ['https://bicycle-store-frontend-pi.vercel.app/'],
     credentials: true,
 }));
 exports.app.use(express_1.default.urlencoded({ extended: true }));

@@ -12,10 +12,7 @@ export const app = express();
 app.use(express.json({ limit: config.MAX_JSON_SIZE }));
 app.use(
     cors({
-        origin: [
-            'http://localhost:5173',
-            'https://bicycle-store-frontend-pi.vercel.app/',
-        ],
+        origin: ['https://bicycle-store-frontend-pi.vercel.app/'],
         credentials: true,
     }),
 );
