@@ -24,6 +24,7 @@ router.get('/:productId', productController.getBicycleById);
 router.put(
     '/:productId',
     auth(USER_ROLE.admin),
+    upload.single('imageUrl'),
     productController.updateBicycleById,
 );
 

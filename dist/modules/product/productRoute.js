@@ -17,7 +17,7 @@ router.get('/', productController_1.productController.getAllBicycles);
 // Get a Specific Bicycle
 router.get('/:productId', productController_1.productController.getBicycleById);
 // Update a Bicycle
-router.put('/:productId', (0, auth_1.default)(userConstant_1.USER_ROLE.admin), productController_1.productController.updateBicycleById);
+router.put('/:productId', (0, auth_1.default)(userConstant_1.USER_ROLE.admin), multer_1.upload.single('imageUrl'), productController_1.productController.updateBicycleById);
 // Delete a Bicycle
 router.delete('/:productId', (0, auth_1.default)(userConstant_1.USER_ROLE.admin), productController_1.productController.deleteBicycleById);
 exports.productRoutes = router;

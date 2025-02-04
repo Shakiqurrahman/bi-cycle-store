@@ -60,7 +60,15 @@ const getBicycleById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
 const updateBicycleById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { productId } = req.params;
     const validatedData = productValidation_1.productUpdateValidationSchema.parse(req.body);
-    const updatedBicycle = yield productService_1.productServices.updateBicycleFromDB(productId, Object.assign(Object.assign({}, validatedData), { price: Number(validatedData.price), quantity: Number(validatedData.quantity) }));
+    let imageUrl = undefined;
+    if (req.file) {
+        const uploadResult = yield (0, cloudinary_1.uploadToCloudinary)(req.file.path);
+        imageUrl = uploadResult.secure_url;
+        if (!uploadResult) {
+            throw new AppError_1.default(http_status_1.default.INTERNAL_SERVER_ERROR, 'Upload failed');
+        }
+    }
+    const updatedBicycle = yield productService_1.productServices.updateBicycleFromDB(productId, Object.assign(Object.assign({ imageUrl }, validatedData), { price: Number(validatedData.price), quantity: Number(validatedData.quantity) }));
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,

@@ -67,9 +67,25 @@ const getBicycleById = catchAsync(async (req, res) => {
 const updateBicycleById = catchAsync(async (req, res) => {
     const { productId } = req.params;
     const validatedData = productUpdateValidationSchema.parse(req.body);
+
+    let imageUrl: string | undefined = undefined;
+
+    if (req.file) {
+        const uploadResult = await uploadToCloudinary(req.file.path);
+        imageUrl = uploadResult.secure_url;
+
+        if (!uploadResult) {
+            throw new AppError(
+                httpStatus.INTERNAL_SERVER_ERROR,
+                'Upload failed',
+            );
+        }
+    }
+
     const updatedBicycle = await productServices.updateBicycleFromDB(
         productId,
         {
+            imageUrl,
             ...validatedData,
             price: Number(validatedData.price),
             quantity: Number(validatedData.quantity),
