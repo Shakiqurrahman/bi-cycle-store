@@ -20,6 +20,19 @@ const orderSchema = new mongoose_1.Schema({
         enum: Object.values(OrderConstants_1.OrderStatus),
         default: OrderConstants_1.OrderStatus.Pending,
     },
+    paymentStatus: {
+        type: String,
+        default: 'Pending',
+    },
+    transaction: {
+        id: String,
+        transactionStatus: String,
+        bank_status: String,
+        sp_code: String,
+        sp_message: String,
+        method: String,
+        date_time: String,
+    },
 }, {
     timestamps: true,
 });

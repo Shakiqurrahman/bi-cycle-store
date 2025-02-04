@@ -13,6 +13,12 @@ router.post(
 );
 
 router.get(
+    '/order/verify',
+    auth(USER_ROLE.customer),
+    orderControllers.verifyPayment,
+);
+
+router.get(
     '/',
     auth(USER_ROLE.admin, USER_ROLE.customer),
     orderControllers.getAllOrders,

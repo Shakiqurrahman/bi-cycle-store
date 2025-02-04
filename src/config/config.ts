@@ -15,4 +15,12 @@ export const config = {
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
     CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+
+    sp: {
+        sp_endpoint: process.env.SP_ENDPOINT,
+        sp_username: process.env.SP_USERNAME,
+        sp_password: process.env.SP_PASSWORD,
+        sp_prefix: process.env.SP_PREFIX,
+        sp_return_url: process.env.SP_RETURN_URL,
+    },
 };

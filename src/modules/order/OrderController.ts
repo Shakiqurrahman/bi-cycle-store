@@ -8,14 +8,32 @@ import {
 } from './orderValidation';
 
 const orderABicycle = catchAsync(async (req, res) => {
+    const { userId } = req.user;
     const validatedData = orderValidationSchema.parse(req.body);
-    const newOrder = await orderServices.placeOrder(validatedData);
+    const newOrder = await orderServices.placeOrder(
+        validatedData,
+        userId,
+        req.ip!,
+    );
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: 'Order created successfully!',
+        data: newOrder,
+    });
+});
+
+const verifyPayment = catchAsync(async (req, res) => {
+    const order = await orderServices.verifyPayment(
+        req.query.order_id as string,
+    );
 
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
-        message: 'Order created successfully',
-        data: newOrder,
+        message: 'Order verified successfully',
+        data: order,
     });
 });
 
@@ -85,6 +103,7 @@ const getRevenue = catchAsync(async (req, res) => {
 
 export const orderControllers = {
     orderABicycle,
+    verifyPayment,
     getAllOrders,
     getOrderById,
     getRevenue,

@@ -20,6 +20,19 @@ const orderSchema = new Schema<TOrder>(
             enum: Object.values(OrderStatus),
             default: OrderStatus.Pending,
         },
+        paymentStatus: {
+            type: String,
+            default: 'Pending',
+        },
+        transaction: {
+            id: String,
+            transactionStatus: String,
+            bank_status: String,
+            sp_code: String,
+            sp_message: String,
+            method: String,
+            date_time: String,
+        },
     },
     {
         timestamps: true,

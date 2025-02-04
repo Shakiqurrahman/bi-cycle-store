@@ -19,13 +19,23 @@ const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const OrderService_1 = require("./OrderService");
 const orderValidation_1 = require("./orderValidation");
 const orderABicycle = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.user;
     const validatedData = orderValidation_1.orderValidationSchema.parse(req.body);
-    const newOrder = yield OrderService_1.orderServices.placeOrder(validatedData);
+    const newOrder = yield OrderService_1.orderServices.placeOrder(validatedData, userId, req.ip);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.CREATED,
+        message: 'Order created successfully!',
+        data: newOrder,
+    });
+}));
+const verifyPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const order = yield OrderService_1.orderServices.verifyPayment(req.query.order_id);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
-        message: 'Order created successfully',
-        data: newOrder,
+        message: 'Order verified successfully',
+        data: order,
     });
 }));
 const getAllOrders = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -82,6 +92,7 @@ const getRevenue = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
 }));
 exports.orderControllers = {
     orderABicycle,
+    verifyPayment,
     getAllOrders,
     getOrderById,
     getRevenue,

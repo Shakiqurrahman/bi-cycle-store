@@ -9,4 +9,14 @@ export type TOrder = {
     quantity: number;
     totalPrice: number;
     status: TOrderStatus;
+    paymentStatus: string;
+    transaction: {
+        id: string;
+        transactionStatus: string;
+        bank_status: string;
+        sp_code: string;
+        sp_message: string;
+        method: string;
+        date_time: string;
+    };
 };

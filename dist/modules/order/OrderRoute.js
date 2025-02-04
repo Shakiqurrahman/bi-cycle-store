@@ -11,6 +11,7 @@ const OrderController_1 = require("./OrderController");
 const router = (0, express_1.Router)();
 // Order a Bicycle
 router.post('/order/create', (0, auth_1.default)(userConstant_1.USER_ROLE.customer), OrderController_1.orderControllers.orderABicycle);
+router.get('/order/verify', (0, auth_1.default)(userConstant_1.USER_ROLE.customer), OrderController_1.orderControllers.verifyPayment);
 router.get('/', (0, auth_1.default)(userConstant_1.USER_ROLE.admin, userConstant_1.USER_ROLE.customer), OrderController_1.orderControllers.getAllOrders);
 router.get('/:orderId', (0, auth_1.default)(userConstant_1.USER_ROLE.admin, userConstant_1.USER_ROLE.customer), OrderController_1.orderControllers.getOrderById);
 router.patch('/:orderId/cancel', (0, auth_1.default)(userConstant_1.USER_ROLE.customer), OrderController_1.orderControllers.orderCancelByUser);
