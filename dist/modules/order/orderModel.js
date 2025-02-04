@@ -2,11 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Order = void 0;
 const mongoose_1 = require("mongoose");
+const OrderConstants_1 = require("./OrderConstants");
 const orderSchema = new mongoose_1.Schema({
-    email: {
-        type: String,
-        lowercase: true,
-        required: true,
+    user: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
     },
     product: {
         type: mongoose_1.Schema.Types.ObjectId,
@@ -15,6 +15,11 @@ const orderSchema = new mongoose_1.Schema({
     },
     quantity: Number,
     totalPrice: Number,
+    status: {
+        type: String,
+        enum: Object.values(OrderConstants_1.OrderStatus),
+        default: OrderConstants_1.OrderStatus.Pending,
+    },
 }, {
     timestamps: true,
 });

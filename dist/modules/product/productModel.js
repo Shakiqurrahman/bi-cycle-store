@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Product = void 0;
 const mongoose_1 = require("mongoose");
+const productContstant_1 = require("./productContstant");
 const productSchema = new mongoose_1.Schema({
     name: {
         type: String,
@@ -12,16 +13,24 @@ const productSchema = new mongoose_1.Schema({
         type: Number,
         required: true,
     },
-    type: {
+    category: {
         type: String,
-        enum: ['Mountain', 'Road', 'Hybrid', 'BMX', 'Electric'],
+        enum: Object.values(productContstant_1.bicycleCategory),
     },
+    imageUrl: String,
     description: String,
     quantity: {
         type: Number,
         default: 0,
     },
-    inStock: Boolean,
+    inStock: {
+        type: Boolean,
+        default: true,
+    },
+    isFeatured: {
+        type: Boolean,
+        default: false,
+    },
 }, {
     timestamps: true,
 });

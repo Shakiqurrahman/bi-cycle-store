@@ -30,10 +30,13 @@ const userModel = new mongoose_1.Schema({
         required: true,
         select: false,
     },
+    avatar: {
+        type: String,
+    },
     role: {
         type: String,
-        enum: ['admin', 'user'],
-        default: 'user',
+        enum: ['admin', 'customer'],
+        default: 'customer',
     },
     isBlocked: {
         type: Boolean,

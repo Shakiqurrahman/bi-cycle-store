@@ -14,13 +14,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.productController = void 0;
 const http_status_1 = __importDefault(require("http-status"));
+const AppError_1 = __importDefault(require("../../errors/AppError"));
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
+const cloudinary_1 = require("../../utils/cloudinary");
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const productService_1 = require("./productService");
 const productValidation_1 = require("./productValidation");
 const createABicycle = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const validatedData = productValidation_1.productValidationSchema.parse(req.body);
-    const newBicycle = yield productService_1.productServices.createBicycleIntoDB(validatedData);
+    let imageUrl = undefined;
+    if (req.file) {
+        const uploadResult = yield (0, cloudinary_1.uploadToCloudinary)(req.file.path);
+        imageUrl = uploadResult.secure_url;
+        if (!uploadResult) {
+            throw new AppError_1.default(http_status_1.default.INTERNAL_SERVER_ERROR, 'Upload failed');
+        }
+    }
+    const newBicycle = yield productService_1.productServices.createBicycleIntoDB(Object.assign(Object.assign({ imageUrl }, validatedData), { price: Number(validatedData.price), quantity: Number(validatedData.quantity) }));
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
@@ -50,7 +60,7 @@ const getBicycleById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
 const updateBicycleById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { productId } = req.params;
     const validatedData = productValidation_1.productUpdateValidationSchema.parse(req.body);
-    const updatedBicycle = yield productService_1.productServices.updateBicycleFromDB(productId, validatedData);
+    const updatedBicycle = yield productService_1.productServices.updateBicycleFromDB(productId, Object.assign(Object.assign({}, validatedData), { price: Number(validatedData.price), quantity: Number(validatedData.quantity) }));
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,

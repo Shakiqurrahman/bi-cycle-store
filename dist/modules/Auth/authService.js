@@ -1,5 +1,4 @@
 "use strict";
-/* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -38,7 +37,17 @@ const registerUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, functi
     }
     const newUser = yield userModel_1.User.create(payload);
     const _a = newUser.toObject(), { password } = _a, data = __rest(_a, ["password"]);
-    return data;
+    const jwtPayload = {
+        userId: newUser.id,
+        role: newUser.role,
+    };
+    const accessToken = (0, authUtils_1.createToken)(jwtPayload, config_1.config.ACCESS_TOKEN_SECRET, config_1.config.ACCESS_TOKEN_EXPIRY);
+    const refreshToken = (0, authUtils_1.createToken)(jwtPayload, config_1.config.REFRESH_TOKEN_SECRET, config_1.config.REFRESH_TOKEN_EXPIRY);
+    return {
+        accessToken,
+        refreshToken,
+        user: data,
+    };
 });
 const loginUserFromDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield userModel_1.User.findOne({ email: payload.email }).select('+password');
@@ -48,15 +57,39 @@ const loginUserFromDB = (payload) => __awaiter(void 0, void 0, void 0, function*
     if (user.isBlocked) {
         throw new AppError_1.default(http_status_1.default.UNAUTHORIZED, 'This user is blocked');
     }
+    const _a = user.toObject(), { password } = _a, restUser = __rest(_a, ["password"]);
     const jwtPayload = {
         userId: user.id,
         role: user.role,
     };
     const accessToken = (0, authUtils_1.createToken)(jwtPayload, config_1.config.ACCESS_TOKEN_SECRET, config_1.config.ACCESS_TOKEN_EXPIRY);
     const refreshToken = (0, authUtils_1.createToken)(jwtPayload, config_1.config.REFRESH_TOKEN_SECRET, config_1.config.REFRESH_TOKEN_EXPIRY);
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, user: restUser };
+});
+const generateNewAccessToken = (refreshToken) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!refreshToken) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'Refresh token not found !');
+    }
+    const decoded = (0, authUtils_1.verifyToken)(refreshToken, config_1.config.REFRESH_TOKEN_SECRET);
+    const { userId } = decoded;
+    // checking if the user is exist
+    const user = yield userModel_1.User.findById(userId);
+    if (!user) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'This user is not found !');
+    }
+    const isBlocked = user === null || user === void 0 ? void 0 : user.isBlocked;
+    if (isBlocked) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'This user is deleted !');
+    }
+    const jwtPayload = {
+        userId: user.id,
+        role: user.role,
+    };
+    const accessToken = (0, authUtils_1.createToken)(jwtPayload, config_1.config.ACCESS_TOKEN_SECRET, config_1.config.ACCESS_TOKEN_EXPIRY);
+    return accessToken;
 });
 exports.authServices = {
     registerUserIntoDB,
     loginUserFromDB,
+    generateNewAccessToken,
 };

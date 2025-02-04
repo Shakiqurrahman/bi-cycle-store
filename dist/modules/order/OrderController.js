@@ -28,6 +28,49 @@ const orderABicycle = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         data: newOrder,
     });
 }));
+const getAllOrders = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userData = req.user;
+    const orders = yield OrderService_1.orderServices.getAllOrdersFromDB(userData);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Orders retrieved successfully',
+        data: orders,
+    });
+}));
+const getOrderById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userData = req.user;
+    const { orderId } = req.params;
+    const order = yield OrderService_1.orderServices.getOrderById(orderId, userData);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Order retrieved successfully',
+        data: order,
+    });
+}));
+const orderCancelByUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userData = req.user;
+    const { orderId } = req.params;
+    const order = yield OrderService_1.orderServices.orderCancel(orderId, userData);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Order cancelled successfully',
+        data: order,
+    });
+}));
+const orderUpdateByAdmins = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { orderId } = req.params;
+    const { status } = orderValidation_1.orderStatusUpdateValidation.parse(req.body);
+    const order = yield OrderService_1.orderServices.orderStatusUpdate(orderId, status);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Order status updated successfully',
+        data: order,
+    });
+}));
 const getRevenue = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const totalRevenue = yield OrderService_1.orderServices.calculateRevenue();
     (0, sendResponse_1.default)(res, {
@@ -39,5 +82,9 @@ const getRevenue = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
 }));
 exports.orderControllers = {
     orderABicycle,
+    getAllOrders,
+    getOrderById,
     getRevenue,
+    orderCancelByUser,
+    orderUpdateByAdmins,
 };
