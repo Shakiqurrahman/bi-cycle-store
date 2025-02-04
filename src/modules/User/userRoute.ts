@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import auth from '../../middlewares/auth';
+import { upload } from '../../middlewares/multer';
 import { USER_ROLE } from './userConstant';
 import { userController } from './userController';
 
@@ -13,7 +14,8 @@ router.get(
 router.patch(
     '/update',
     auth(USER_ROLE.admin, USER_ROLE.customer),
-    userController.getUserById,
+    upload.single('avatar'),
+    userController.updateUser,
 );
 router.post(
     '/change-password',

@@ -1,6 +1,8 @@
 import { RequestHandler } from 'express';
 import httpStatus from 'http-status';
+import AppError from '../../errors/AppError';
 import catchAsync from '../../utils/catchAsync';
+import { uploadToCloudinary } from '../../utils/cloudinary';
 import sendResponse from '../../utils/sendResponse';
 import { userServices } from './userServices';
 import { userValidation } from './userValidation';
@@ -21,7 +23,24 @@ const updateUser = catchAsync(async (req, res) => {
     const { userId } = req.user;
     const validatedData = userValidation.updateUser.parse(req.body);
 
-    const user = await userServices.updateUserFromDB(userId, validatedData);
+    let avatarUrl: string | undefined = undefined;
+
+    if (req.file) {
+        const uploadResult = await uploadToCloudinary(req.file.path);
+        avatarUrl = uploadResult.secure_url;
+
+        if (!uploadResult) {
+            throw new AppError(
+                httpStatus.INTERNAL_SERVER_ERROR,
+                'Upload failed',
+            );
+        }
+    }
+
+    const user = await userServices.updateUserFromDB(userId, {
+        avatar: avatarUrl,
+        ...validatedData,
+    });
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
