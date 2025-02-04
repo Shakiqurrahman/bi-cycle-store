@@ -10,34 +10,48 @@ Bicycle Store is a modern, robust platform tailored for efficient management of 
 
 1. Inventory Management ( Add, update, delete bicycle details. )
 2. Order Management ( create and manage customer orders )
-3. Data validation ( Robust schema validation with Zod and ensures type safety )
-4. Code quality ( Enforced standards with ESLint and consistent code formatting with Prettier )
+3. Payment Integration ( ShurjoPay )
+4. Data validation ( Robust schema validation with Zod and ensures type safety )
+5. Code quality ( Enforced standards with ESLint and consistent code formatting with Prettier )
 
 ---
 
 ### Technology Used
 
--   TypeScript - For static typing and advanced developer tooling.
--   Node.js & Express.js - Backend server & routing.
--   MongoDB - NoSQL database for storing application data
--   Mongoose - ODM library for MongoDB.
--   Zod - Schema declaration and validation library.
--   ESLint - Ensures code quality to best practices.
--   Prettier - Maintains consistent code formatting.
+- TypeScript - For static typing and advanced developer tooling.
+- Node.js & Express.js - Backend server & routing.
+- MongoDB - NoSQL database for storing application data
+- Mongoose - ODM library for MongoDB.
+- Zod - Schema declaration and validation library.
+- ESLint - Ensures code quality to best practices.
+- Prettier - Maintains consistent code formatting.
 
 ---
 
 ### Scripts
 
--   npm run dev - Start the development server.
--   npm run build - Build the application.
--   npm run lint - Run ESLint to check for code issues.
--   npm run lint:fix - Fixed to some errors automatically.
+- npm run dev - Start the development server.
+- npm run build - Build the application.
+- npm run lint - Run ESLint to check for code issues.
+- npm run lint:fix - Fixed to some errors automatically.
 
 ### Environment Variable
 
--   PORT
--   MONGODB_URI
+- PORT
+- MONGODB_URI
+- NODE_ENV
+- ACCESS_TOKEN_SECRET
+- ACCESS_TOKEN_EXPIRY
+- REFRESH_TOKEN_SECRET
+- REFRESH_TOKEN_EXPIRY
+- CLOUDINARY_CLOUD_NAME
+- CLOUDINARY_API_KEY
+- CLOUDINARY_API_SECRET
+- SP_ENDPOINT
+- SP_USERNAME
+- SP_PASSWORD
+- SP_PREFIX
+- SP_RETURN_URL
 
 ### Getting Started
 
@@ -45,8 +59,8 @@ Bicycle Store is a modern, robust platform tailored for efficient management of 
 
 Ensure you have the following installed:
 
--   Node.js v20
--   npm
+- Node.js v20
+- npm
 
 #### Installation
 
@@ -72,25 +86,25 @@ MONGODB_URI = your_mongodb_uri;
 
 #### Usage
 
--   Run the development server:
+- Run the development server:
 
 ```js
 npm run dev
 ```
 
--   build for production:
+- build for production:
 
 ```js
 npm run build
 ```
 
--   check the EsLint error:
+- check the EsLint error:
 
 ```js
 npm run lint
 ```
 
--   fix the EsLint error:
+- fix the EsLint error:
 
 ```js
 npm run lint:fix
