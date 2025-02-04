@@ -1,12 +1,18 @@
 import { Router } from 'express';
 import auth from '../../middlewares/auth';
+import { upload } from '../../middlewares/multer';
 import { USER_ROLE } from '../User/userConstant';
 import { productController } from './productController';
 
 const router = Router();
 
 // Create a Bicycle
-router.post('/', auth(USER_ROLE.admin), productController.createABicycle);
+router.post(
+    '/',
+    upload.single('imageUrl'),
+    auth(USER_ROLE.admin),
+    productController.createABicycle,
+);
 
 // Get All Bicycles
 router.get('/', productController.getAllBicycles);

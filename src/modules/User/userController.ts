@@ -64,14 +64,25 @@ const changePassword: RequestHandler = catchAsync(async (req, res) => {
 
 const blockUser = catchAsync(async (req, res) => {
     const { userId } = req.params;
-
-    await userServices.blockUserFromDB(userId);
+    const validatedData = userValidation.statusUpdate.parse(req.body);
+    
+    await userServices.blockUserFromDB(userId, validatedData);
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: 'user blocked succesfully!',
+        message: 'User status update succesfully!',
         data: {},
+    });
+});
+
+const getAllUsers = catchAsync(async (req, res) => {
+    const users = await userServices.getAllUsersFromDB();
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Users retrived succesfully!',
+        data: users,
     });
 });
 
@@ -80,4 +91,5 @@ export const userController = {
     updateUser,
     changePassword,
     blockUser,
+    getAllUsers,
 };

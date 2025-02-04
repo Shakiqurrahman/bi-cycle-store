@@ -1,5 +1,7 @@
 import httpStatus from 'http-status';
+import AppError from '../../errors/AppError';
 import catchAsync from '../../utils/catchAsync';
+import { uploadToCloudinary } from '../../utils/cloudinary';
 import sendResponse from '../../utils/sendResponse';
 import { productServices } from './productService';
 import {
@@ -9,7 +11,27 @@ import {
 
 const createABicycle = catchAsync(async (req, res) => {
     const validatedData = productValidationSchema.parse(req.body);
-    const newBicycle = await productServices.createBicycleIntoDB(validatedData);
+
+    let imageUrl: string | undefined = undefined;
+
+    if (req.file) {
+        const uploadResult = await uploadToCloudinary(req.file.path);
+        imageUrl = uploadResult.secure_url;
+
+        if (!uploadResult) {
+            throw new AppError(
+                httpStatus.INTERNAL_SERVER_ERROR,
+                'Upload failed',
+            );
+        }
+    }
+
+    const newBicycle = await productServices.createBicycleIntoDB({
+        imageUrl,
+        ...validatedData,
+        price: Number(validatedData.price),
+        quantity: Number(validatedData.quantity),
+    });
 
     sendResponse(res, {
         success: true,
@@ -47,7 +69,11 @@ const updateBicycleById = catchAsync(async (req, res) => {
     const validatedData = productUpdateValidationSchema.parse(req.body);
     const updatedBicycle = await productServices.updateBicycleFromDB(
         productId,
-        validatedData,
+        {
+            ...validatedData,
+            price: Number(validatedData.price),
+            quantity: Number(validatedData.quantity),
+        },
     );
 
     sendResponse(res, {

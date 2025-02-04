@@ -22,6 +22,7 @@ router.post(
     auth(USER_ROLE.admin, USER_ROLE.customer),
     userController.changePassword,
 );
-router.patch('/:userId/block', auth(USER_ROLE.admin), userController.blockUser);
+router.patch('/:userId/status', auth(USER_ROLE.admin), userController.blockUser);
+router.get('/', auth(USER_ROLE.admin), userController.getAllUsers);
 
 export const userRoutes = router;

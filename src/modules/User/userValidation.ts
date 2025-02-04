@@ -14,7 +14,12 @@ const changePassword = z.object({
     }),
 });
 
+const statusUpdate = z.object({
+    isBlocked: z.boolean(),
+});
+
 export const userValidation = {
     changePassword,
     updateUser,
+    statusUpdate,
 };

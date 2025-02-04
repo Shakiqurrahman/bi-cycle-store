@@ -1,10 +1,10 @@
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Request, Response } from 'express';
 import { config } from './config/config';
 import globalErrorHandler from './middlewares/globalErrorHandler';
 import notFound from './middlewares/notFound';
 import router from './routes/route';
-import cookieParser from "cookie-parser"
 
 export const app = express();
 
@@ -12,7 +12,10 @@ export const app = express();
 app.use(express.json({ limit: config.MAX_JSON_SIZE }));
 app.use(
     cors({
-        origin: ['http://localhost:5173'],
+        origin: [
+            'http://localhost:5173',
+            'https://bicycle-store-frontend-pi.vercel.app/',
+        ],
         credentials: true,
     }),
 );

@@ -1,5 +1,6 @@
 import { model, Schema } from 'mongoose';
 import { TBicycle } from './productInterface';
+import { bicycleCategory } from './productContstant';
 
 const productSchema = new Schema<TBicycle>(
     {
@@ -12,10 +13,11 @@ const productSchema = new Schema<TBicycle>(
             type: Number,
             required: true,
         },
-        type: {
+        category: {
             type: String,
-            enum: ['Mountain', 'Road', 'Hybrid', 'BMX', 'Electric'],
+            enum: Object.values(bicycleCategory),
         },
+        imageUrl: String,
         description: String,
         quantity: {
             type: Number,
