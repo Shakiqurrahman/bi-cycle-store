@@ -15,7 +15,7 @@ app.use(
         origin: 'https://bicycle-store-frontend-pi.vercel.app',
         credentials: true,
         allowedHeaders: ['Content-Type', 'Authorization', 'Origin'],
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     }),
 );
 app.use(express.urlencoded({ extended: true }));

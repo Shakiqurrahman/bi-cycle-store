@@ -18,7 +18,7 @@ exports.app.use((0, cors_1.default)({
     origin: 'https://bicycle-store-frontend-pi.vercel.app',
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'Origin'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
 }));
 exports.app.use(express_1.default.urlencoded({ extended: true }));
 exports.app.use((0, cookie_parser_1.default)());
